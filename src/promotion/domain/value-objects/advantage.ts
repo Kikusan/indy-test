@@ -1,4 +1,4 @@
-import { InvalidAdvantageError } from '../errors/invalid-advantage.error';
+import { InvalidAdvantageError } from '../errors';
 
 export class Advantage {
   constructor(public readonly percent: number) {

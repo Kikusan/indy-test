@@ -2,7 +2,7 @@ import BadRequestError from '@errors/BadRequestError';
 
 export class InvalidAdvantageError extends BadRequestError {
   constructor() {
-    super();
+    super('the reduction percentage must be between 0 and 100');
     this.name = 'InvalidAdvantageError';
   }
 }

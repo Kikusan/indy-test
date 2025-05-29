@@ -1,6 +1,7 @@
 import { PromotionProps } from './promotion.props';
 import { Restriction } from './restriction.type';
 import { Advantage } from './value-objects/advantage';
+import { Period } from './value-objects/period';
 
 export class Promotion {
   private readonly name: string;
@@ -12,10 +13,7 @@ export class Promotion {
     this.name = name;
     this.advantage = new Advantage(reductionPercent);
     const dateRestriction: Restriction = {
-      date: {
-        after: period.beginDate,
-        before: period.endDate,
-      },
+      date: new Period(period.beginDate, period.endDate),
     };
     this.restrictions.push(dateRestriction);
   }

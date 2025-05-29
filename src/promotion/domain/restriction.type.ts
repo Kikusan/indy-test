@@ -1,8 +1,5 @@
-export type Restriction = {
-  date: dateRestriction;
-};
+import { Period } from './value-objects/period';
 
-export type dateRestriction = {
-  after: Date;
-  before: Date;
+export type Restriction = {
+  date: Period;
 };
