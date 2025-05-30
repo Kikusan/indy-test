@@ -5,14 +5,7 @@ export type PromotionProps = {
     beginDate: Date;
     endDate: Date;
   };
-  ageRestriction?: AgeProps;
-  weather?: {
-    is?: string;
-    temp?: {
-      gt?: number;
-      lt?: number;
-    };
-  };
+  restrictions?: RestrictionNodeProps;
 };
 
 export type AgeProps = {
@@ -20,3 +13,22 @@ export type AgeProps = {
   lt?: number;
   eq?: number;
 };
+
+export type WeatherProps = {
+  is?: string;
+  temp?: {
+    gt?: number;
+    lt?: number;
+  };
+};
+
+export type RestrictionNodeProps =
+  | { and: RestrictionNodeProps[] }
+  | { or: RestrictionNodeProps[] }
+  | { age: AgeProps }
+  | { weather: WeatherProps };
+
+export type RestrictionTreeProps =
+  | AgeProps
+  | WeatherProps
+  | RestrictionNodeProps[];

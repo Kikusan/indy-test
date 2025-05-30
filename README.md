@@ -59,3 +59,7 @@ docker compose down --volumes
 
 ou docker-compose down --volumes selon la version de docker compose
 Vous pouvez supprimer le dossier par la suite.
+
+## Journal de bord
+
+Vous pouvez voir l'évolution de ma réfléxion [ici](diary.md)

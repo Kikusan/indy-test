@@ -1,8 +1,17 @@
 import { Age } from './value-objects/age';
 import { Period } from './value-objects/period';
+import { Weather } from './value-objects/weather';
 
-export type Restriction = {
+export type DateRestriction = {
   date?: Period;
-  age?: Age;
-  weather?: any;
 };
+
+export type LeafRestriction = {
+  age?: Age;
+  weather?: Weather;
+};
+
+export type RestrictionNode =
+  | LeafRestriction
+  | { and: RestrictionNode[] }
+  | { or: RestrictionNode[] };

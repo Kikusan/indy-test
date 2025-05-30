@@ -16,40 +16,123 @@ describe('Promotion entity', () => {
         beginDate: new Date('2019-01-01'),
         endDate: new Date('2026-01-01'),
       },
-      ageRestriction: { lt: 65, gt: 18 },
-      weather: {
-        is: 'Clear',
-        temp: {
-          gt: 10,
-          lt: 30,
-        },
+      restrictions: {
+        age: { lt: 65, gt: 18 },
       },
     };
+
     const promotion = new Promotion(promotionProps);
+
     const expectedPromotion = {
       name: 'basic',
       advantage: { percent: 30 },
-      restrictions: [
-        {
-          date: {
-            after: new Date('2019-01-01'),
-            before: new Date('2026-01-01'),
-          },
-        },
-        {
-          age: { lt: 65, gt: 18 },
-        },
-        {
-          weather: {
-            is: 'Clear',
-            temp: {
-              gt: 10,
-              lt: 30,
-            },
-          },
-        },
-      ],
+      dateRestriction: {
+        after: new Date('2019-01-01'),
+        before: new Date('2026-01-01'),
+      },
+      restrictionTree: {
+        age: { lt: 65, gt: 18 },
+      },
     };
+
+    expect(promotion).toEqual(expectedPromotion);
+  });
+
+  it('should create a complex promotion', () => {
+    const promotionProps: PromotionProps = {
+      name: 'DeepPromo',
+      reductionPercent: 25,
+      period: {
+        beginDate: new Date('2021-01-01'),
+        endDate: new Date('2024-12-31'),
+      },
+      restrictions: {
+        or: [
+          {
+            age: { eq: 50 },
+          },
+          {
+            and: [
+              {
+                age: { gt: 18, lt: 35 },
+              },
+              {
+                or: [
+                  {
+                    weather: {
+                      is: 'Rain',
+                      temp: { lt: 10 },
+                    },
+                  },
+                  {
+                    and: [
+                      {
+                        age: { gt: 60 },
+                      },
+                      {
+                        weather: {
+                          is: 'Clear',
+                          temp: { gt: 20 },
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const promotion = new Promotion(promotionProps);
+
+    const expectedPromotion = {
+      name: 'DeepPromo',
+      advantage: { percent: 25 },
+      dateRestriction: {
+        after: new Date('2021-01-01'),
+        before: new Date('2024-12-31'),
+      },
+      restrictionTree: {
+        or: [
+          {
+            age: { eq: 50 },
+          },
+          {
+            and: [
+              {
+                age: { gt: 18, lt: 35 },
+              },
+              {
+                or: [
+                  {
+                    weather: {
+                      is: 'Rain',
+                      temp: { lt: 10 },
+                    },
+                  },
+                  {
+                    and: [
+                      {
+                        age: { gt: 60 },
+                      },
+                      {
+                        weather: {
+                          is: 'Clear',
+                          temp: { gt: 20 },
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    };
+
     expect(promotion).toEqual(expectedPromotion);
   });
 
@@ -115,7 +198,7 @@ describe('Promotion entity', () => {
         beginDate: new Date('2006-01-01'),
         endDate: new Date('2019-01-01'),
       },
-      ageRestriction: { lt: 18, gt: 65 },
+      restrictions: { age: { lt: 18, gt: 65 } },
     };
     try {
       new Promotion(promotionProps);
@@ -138,7 +221,7 @@ describe('Promotion entity', () => {
         beginDate: new Date('2006-01-01'),
         endDate: new Date('2019-01-01'),
       },
-      ageRestriction: { eq: 18, lt: 65 },
+      restrictions: { age: { eq: 18, lt: 65 } },
     };
     try {
       new Promotion(promotionProps);
@@ -161,9 +244,15 @@ describe('Promotion entity', () => {
         beginDate: new Date('2006-01-01'),
         endDate: new Date('2019-01-01'),
       },
-      ageRestriction: { eq: 18 },
-      weather: {
-        is: 'Chaos',
+      restrictions: {
+        and: [
+          { age: { eq: 18 } },
+          {
+            weather: {
+              is: 'Chaos',
+            },
+          },
+        ],
       },
     };
     try {
@@ -183,12 +272,18 @@ describe('Promotion entity', () => {
         beginDate: new Date('2006-01-01'),
         endDate: new Date('2019-01-01'),
       },
-      ageRestriction: { eq: 18 },
-      weather: {
-        temp: {
-          lt: 10,
-          gt: 30,
-        },
+      restrictions: {
+        and: [
+          { age: { eq: 18 } },
+          {
+            weather: {
+              temp: {
+                lt: 10,
+                gt: 30,
+              },
+            },
+          },
+        ],
       },
     };
     try {
