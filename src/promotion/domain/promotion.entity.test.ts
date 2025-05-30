@@ -190,6 +190,24 @@ describe('Promotion entity', () => {
     expect(false).toBeTruthy();
   });
 
+  it('should throw an invalid period error if the begin date or the end date is null or invalid', () => {
+    const promotionProps: PromotionProps = {
+      name: 'basic',
+      reductionPercent: 90,
+      period: {
+        beginDate: new Date('fail'),
+        endDate: new Date('2019-01-01'),
+      },
+    };
+    try {
+      new Promotion(promotionProps);
+    } catch (e) {
+      expect(e).toBeInstanceOf(InvalidPeriodError);
+      return;
+    }
+    expect(false).toBeTruthy();
+  });
+
   it('should throw an invalid age restriction error if gt is lower than lt', () => {
     const promotionProps: PromotionProps = {
       name: 'basic',

@@ -26,6 +26,10 @@ export class Promotion {
     }
   }
 
+  getName(): string {
+    return this.name;
+  }
+
   private parseRestrictions(input: RestrictionNodeProps): RestrictionNode {
     const parsers: Record<
       string,

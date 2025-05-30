@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +19,13 @@ async function bootstrap() {
       cache: false,
     },
   });
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+  app.useGlobalInterceptors(new ErrorInterceptor());
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

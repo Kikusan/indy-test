@@ -1,10 +1,7 @@
 export type PromotionProps = {
   name: string;
   reductionPercent: number;
-  period: {
-    beginDate: Date;
-    endDate: Date;
-  };
+  period: PeriodProps;
   restrictions?: RestrictionNodeProps;
 };
 
@@ -32,3 +29,8 @@ export type RestrictionTreeProps =
   | AgeProps
   | WeatherProps
   | RestrictionNodeProps[];
+
+export type PeriodProps = {
+  beginDate: Date;
+  endDate: Date;
+};
