@@ -11,10 +11,6 @@ export class InMemoryPromotionRepository implements IPromotionRepository {
     return Promise.resolve();
   }
 
-  get(): Promise<Promotion[]> {
-    return Promise.resolve(this.promotions);
-  }
-
   getbyName(name: string): Promise<Promotion | null> {
     const found = this.promotions.find((promo) => promo.getName() === name);
     return Promise.resolve(found ?? null);

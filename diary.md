@@ -35,6 +35,6 @@ je vais considérer que si un promocode à plusieurs date de validité, c'est qu
 ## Deuxième étape
 
 Je vais faire en sorte que le use case de création de code promo soit codé de bout en bout avec un repository in memory et couvert avec supertest.
-Pour des raisons obscurs, la validation de mon DTO ne se fait pas correctement ni la transformation. Je passe donc sur un mapper.
+Pour des raisons obscurs, la validation de mon DTO ne se fait pas correctement ni la transformation. Apparement pour des nested objects la validation ou la transformation est tricky. Je passe donc sur un mapper.
 L'impact est leger car mon domaine est protégé mais j'ai perdu un peu de temps pour voir le pourquoi du comment et en plus je n'ai pas trouvé sur le coup (╯°□°）╯︵ ┻━┻ )
 Cela dit c'est à voir si j'ai le temps car l'impact est faible et les tests sont là donc je me dis que c'est ok

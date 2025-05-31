@@ -6,10 +6,10 @@ export class PeriodDto {
   @ApiProperty({ example: '2025-06-01' })
   @IsDate()
   @Type(() => Date)
-  beginDate: Date;
+  after: Date;
 
   @ApiProperty({ example: '2025-06-30' })
   @IsDate()
   @Type(() => Date)
-  endDate: Date;
+  before: Date;
 }

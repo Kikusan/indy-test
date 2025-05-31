@@ -6,10 +6,15 @@ import { WeatherDto } from './weather.dto';
 import { PeriodDto } from './period.dto';
 
 export class RestrictionNodeDto {
+  @ApiProperty({ type: PeriodDto, required: false })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PeriodDto)
+  date?: PeriodDto;
   @ApiProperty({
     type: [RestrictionNodeDto],
     required: false,
-    example: { weather: { is: 'Clear' } },
+    example: [{ weather: { is: 'Clear' } }],
   })
   @IsOptional()
   @IsArray()
@@ -20,7 +25,7 @@ export class RestrictionNodeDto {
   @ApiProperty({
     type: [RestrictionNodeDto],
     required: false,
-    example: { age: { eq: 18 } },
+    example: [{ age: { eq: 18 } }],
   })
   @IsOptional()
   @IsArray()
@@ -39,10 +44,4 @@ export class RestrictionNodeDto {
   @ValidateNested()
   @Type(() => WeatherDto)
   weather?: WeatherDto;
-
-  @ApiProperty({ type: PeriodDto, required: false })
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => PeriodDto)
-  period?: PeriodDto;
 }

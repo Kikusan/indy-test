@@ -4,8 +4,13 @@ import {
   ApiTags,
   ApiCreatedResponse,
   ApiBadRequestResponse,
+  ApiOperation,
 } from '@nestjs/swagger';
-import { PeriodProps, PromotionProps } from '../domain/promotion.props';
+import {
+  PeriodProps,
+  PromotionProps,
+  RestrictionNodeProps,
+} from '../domain/promotion.props';
 import { CreatePromotionService } from '../services/create-promotion';
 
 @ApiTags('Promotions')
@@ -16,6 +21,11 @@ export class PromotionController {
   ) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a new promotion',
+    description:
+      'Creates a promotion with optional restrictions and a defined advantage, the first restriction must be the date restriction and is mandatory',
+  })
   @ApiCreatedResponse({ description: 'Promotion successfully created' })
   @ApiBadRequestResponse({ description: 'Invalid input' })
   async create(@Body() dto: CreatePromotionDto) {
@@ -30,8 +40,12 @@ const CreatePromotionDtoToPromotionPropsMapper = (
   dto: CreatePromotionDto,
 ): PromotionProps => {
   const { name, advantage, restrictions } = dto;
+  let customRestrictions;
   const period = mapPeriod(restrictions[0]);
-  const customRestrictions = restrictions[1];
+  if (restrictions[1]) {
+    customRestrictions = hasAtLeastOneProperty(restrictions[1]);
+  }
+
   return {
     name,
     restrictions: customRestrictions,
@@ -47,11 +61,23 @@ const mapPeriod = (restriction): PeriodProps => {
     );
   }
 
-  const before = new Date(restriction.date.before);
-  const after = new Date(restriction.date.after);
-
   return {
-    beginDate: after,
-    endDate: before,
+    beginDate: restriction.date.after,
+    endDate: restriction.date.before,
   };
 };
+
+function hasAtLeastOneProperty(restriction): RestrictionNodeProps {
+  const properties = ['and', 'or', 'age', 'weather', 'date'];
+  const isRestriction = properties.some(
+    (prop) => restriction[prop] !== undefined && restriction[prop] !== null,
+  );
+
+  if (isRestriction) {
+    return restriction;
+  } else {
+    throw new BadRequestException(
+      'the restriction rules if defined must be have at least one restriction',
+    );
+  }
+}
