@@ -96,12 +96,8 @@ describe('createPromotionService', () => {
       },
       reductionPercent: 20,
     };
-    try {
-      await createPromotionService.execute(promotionToBeCreated);
-    } catch (e) {
-      expect(e).toBeInstanceOf(InvalidNameError);
-      return;
-    }
-    expect(false).toBeTruthy();
+    await expect(
+      createPromotionService.execute(promotionToBeCreated),
+    ).rejects.toThrow(InvalidNameError);
   });
 });

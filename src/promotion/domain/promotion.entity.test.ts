@@ -161,13 +161,9 @@ describe('Promotion entity', () => {
           endDate: new Date('2026-01-01'),
         },
       };
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toBeInstanceOf(InvalidAdvantageError);
-        return;
-      }
-      expect(false).toBeTruthy();
+      expect(() => new Promotion(promotionProps)).toThrow(
+        InvalidAdvantageError,
+      );
     });
 
     it('should throw an invalid advantage error if the advantage is above 100', () => {
@@ -179,13 +175,9 @@ describe('Promotion entity', () => {
           endDate: new Date('2026-01-01'),
         },
       };
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toBeInstanceOf(InvalidAdvantageError);
-        return;
-      }
-      expect(false).toBeTruthy();
+      expect(() => new Promotion(promotionProps)).toThrow(
+        InvalidAdvantageError,
+      );
     });
 
     it('should throw an invalid period error if the begin date is higher than the end date', () => {
@@ -197,13 +189,7 @@ describe('Promotion entity', () => {
           endDate: new Date('2019-01-01'),
         },
       };
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toBeInstanceOf(InvalidPeriodError);
-        return;
-      }
-      expect(false).toBeTruthy();
+      expect(() => new Promotion(promotionProps)).toThrow(InvalidPeriodError);
     });
 
     it('should throw an invalid period error if the begin date or the end date is null or invalid', () => {
@@ -215,13 +201,7 @@ describe('Promotion entity', () => {
           endDate: new Date('2019-01-01'),
         },
       };
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toBeInstanceOf(InvalidPeriodError);
-        return;
-      }
-      expect(false).toBeTruthy();
+      expect(() => new Promotion(promotionProps)).toThrow(InvalidPeriodError);
     });
 
     it('should throw an invalid age restriction error if gt is lower than lt', () => {
@@ -234,17 +214,11 @@ describe('Promotion entity', () => {
         },
         restrictions: { age: { lt: 18, gt: 65 } },
       };
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toEqual(
-          new InvalidAgeError(
-            'Invalid age restriction: gt must be lower than lt',
-          ),
-        );
-        return;
-      }
-      expect(false).toBeTruthy();
+      expect(() => new Promotion(promotionProps)).toThrow(
+        new InvalidAgeError(
+          'Invalid age restriction: gt must be lower than lt',
+        ),
+      );
     });
 
     it('should throw an invalid age restriction error if eq is combined with other attribute', () => {
@@ -257,17 +231,11 @@ describe('Promotion entity', () => {
         },
         restrictions: { age: { eq: 18, lt: 65 } },
       };
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toEqual(
-          new InvalidAgeError(
-            'Invalid age restriction: cannot combine eq with lt or gt',
-          ),
-        );
-        return;
-      }
-      expect(false).toBeTruthy();
+      expect(() => new Promotion(promotionProps)).toThrow(
+        new InvalidAgeError(
+          'Invalid age restriction: cannot combine eq with lt or gt',
+        ),
+      );
     });
 
     it('should throw an invalid weather error if the type of weather is unknown', () => {
@@ -289,13 +257,9 @@ describe('Promotion entity', () => {
           ],
         },
       };
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toEqual(new InvalidWeatherError('Invalid weather: Chaos'));
-        return;
-      }
-      expect(false).toBeTruthy();
+      expect(() => new Promotion(promotionProps)).toThrow(
+        new InvalidWeatherError('Invalid weather: Chaos'),
+      );
     });
 
     it('should throw an invalid weather error if gt is lower than lt', () => {
@@ -320,17 +284,12 @@ describe('Promotion entity', () => {
           ],
         },
       };
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toEqual(
-          new InvalidWeatherError(
-            'Invalid weather restriction: gt must be lower than lt',
-          ),
-        );
-        return;
-      }
-      expect(false).toBeTruthy();
+
+      expect(() => new Promotion(promotionProps)).toThrow(
+        new InvalidWeatherError(
+          'Invalid weather restriction: gt must be lower than lt',
+        ),
+      );
     });
 
     it('should throw an invalid restriction type error if an invalid attribute is found in restrictions', () => {
@@ -355,15 +314,10 @@ describe('Promotion entity', () => {
           ],
         },
       } as PromotionProps;
-      try {
-        new Promotion(promotionProps);
-      } catch (e) {
-        expect(e).toEqual(
-          new InvalidRestrictionTypeError('Unknown restriction type'),
-        );
-        return;
-      }
-      expect(false).toBeTruthy();
+
+      expect(() => new Promotion(promotionProps)).toThrow(
+        new InvalidRestrictionTypeError('Unknown restriction type'),
+      );
     });
   });
 

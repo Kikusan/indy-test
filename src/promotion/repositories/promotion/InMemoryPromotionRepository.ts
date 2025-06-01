@@ -3,9 +3,11 @@ import { IPromotionRepository } from '../promotion/IPromotionRepository';
 
 export class InMemoryPromotionRepository implements IPromotionRepository {
   private readonly promotions: Promotion[] = [];
+
   constructor(promotions: Promotion[] = []) {
     this.promotions = promotions;
   }
+
   save(newPromotion: Promotion) {
     this.promotions.push(newPromotion);
     return Promise.resolve();

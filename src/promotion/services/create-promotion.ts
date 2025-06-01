@@ -5,6 +5,7 @@ import { IPromotionRepository } from '../repositories/promotion/IPromotionReposi
 
 export class CreatePromotionService {
   constructor(private readonly promotionRepository: IPromotionRepository) {}
+
   async execute(promotionProps: PromotionProps): Promise<void> {
     const promotionName = promotionProps.name;
     const promotionWithSameName =

@@ -69,7 +69,27 @@ Je vais m'attaquer au use case de validation d'un code. Cette fois je décide de
 
 La raison est simple, c'est la partie qui est la moins plaisante à faire donc je m'en débarrasse le plus rapidement possible.
 
+## Notes
+
+L’API météo utilisée retourne une température minimale et une température maximale.
+La spécification des restrictions météo mentionne une contrainte de température sous forme de fourchette.
+
+J’ai donc fait le choix d’utiliser la température minimale et maximale fournies par l’API comme bornes de cette fourchette. Cela permet de maximiser les chances de validation tout en restant cohérent avec les données disponibles.
+
 ## Quatrième étape
 
 L'implémentation de la validation d'un code promo et finalisation du use case.
 L'entité Promotion devenant difficile à lire à cause des nombreuses règles, j’ai opté pour une refonte utilisant le pattern [Composite](https://refactoring.guru/fr/design-patterns/composite). Cela permet de représenter les règles simples et combinées de manière récursive, rendant le code plus clair et extensible.
+
+---
+
+## Les choses à faire
+
+- Mettre un hook de pré-commit pour lancer les tests et le linter (husky)
+- Améliorer la liste des raisons du rejet du code promo. On ne sait pas quel règle n'est pas respecté en particulier quand les conditions sont imbriquées (en même temps, est ce que c'est important de le savoir ? )
+- Renommer promotion en promocode car je me suis trompé dès le debut mais du coup le nom est mauvais
+- Persistance en base de données: je l'aurais fait avec postgresql et typeorm mais comme j'ai pris un décision seul sur l'objet métier je ne suis pas allé jusqu'à là (j'aurais peut-être dû assumer jusqu'au bout remarque)
+- Authentification pour au moins protéger la route de création de promotion voire meme pour valider une promotion mais le contrat de l'api aurait changé car l'age aurait été fourni pour le profil de l'utilisateur et sa date de naissance
+- Stratégie de logs. je m'en suis rendu compte à la fin malheuresement mais des logs info en début et fin de use case ainsi que des logs errors au niveau de l'intercepteur aurait été bien
+
+Il y a sûrement d’autres points à améliorer, mais sans retour extérieur, je manque un peu de recul pour les identifier.

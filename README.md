@@ -44,7 +44,7 @@ npm i
 
 ### 3. Configuration de l'application
 
-Prendre le fichier .env.example et en faire une copie nommer .env puis mettre la clé de l'api d'open weather.
+Prendre le fichier .env.example et en faire une copie nommé .env puis mettre la clé de l'api d'open weather.
 (soit vous avez déjà une clé sinon vous pouvez en utiliser celle mise à disposition dans le test)
 
 ```bash
@@ -72,3 +72,7 @@ Vous pouvez supprimer le dossier par la suite.
 ## Journal de bord
 
 Vous pouvez voir l'évolution de ma réfléxion [ici](diary.md)
+
+## Stratégie de test
+
+Vous pouvez voir ma réfléxion sur les tests [ici](tests.md)

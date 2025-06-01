@@ -51,13 +51,9 @@ describe('createPromotionService', () => {
         town: 'Paris',
       },
     };
-    try {
-      await validatePromotionService.execute(payload);
-    } catch (e) {
-      expect(e).toBeInstanceOf(NotFoundError);
-      return;
-    }
-    expect(false).toBeTruthy();
+    await expect(validatePromotionService.execute(payload)).rejects.toThrow(
+      NotFoundError,
+    );
   });
 
   it('should return a not found error when city is unknown', async () => {
@@ -86,12 +82,9 @@ describe('createPromotionService', () => {
         town: 'No where city',
       },
     };
-    try {
-      await validatePromotionService.execute(payload);
-    } catch (e) {
-      expect(e).toBeInstanceOf(NotFoundError);
-      return;
-    }
-    expect(false).toBeTruthy();
+
+    await expect(validatePromotionService.execute(payload)).rejects.toThrow(
+      NotFoundError,
+    );
   });
 });

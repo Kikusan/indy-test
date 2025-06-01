@@ -9,15 +9,18 @@ export class ValidatePromotionService {
     private readonly promotionRepository: IPromotionRepository,
     private readonly weatherRepository: IWeatherRepository,
   ) {}
+
   async execute(validationProps: ValidationProps): Promise<ValidationResult> {
     const promotion = await this.promotionRepository.getbyName(
       validationProps.name,
     );
+
     if (!promotion) {
       throw new NotFoundError(
         `the promocode ${validationProps.name} does not exist`,
       );
     }
+
     const weather = await this.weatherRepository.get(
       validationProps.arguments.town,
     );
