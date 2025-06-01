@@ -63,8 +63,13 @@ Si une base de données devait être introduite, voici les choix que j’assumer
 
 Je viens de m'apercevoir que tout ce qui est promocode je l'ai nommé promotion... Bon bah je renommerai tout ça en fin d'exercice si j'y pense...
 
-## troisième étape
+## Troisième étape
 
 Je vais m'attaquer au use case de validation d'un code. Cette fois je décide de commencer par le contrat d'api et faire la méthode de validation du code promo dans un second temps.
 
 La raison est simple, c'est la partie qui est la moins plaisante à faire donc je m'en débarrasse le plus rapidement possible.
+
+## Quatrième étape
+
+L'implémentation de la validation d'un code promo et finalisation du use case.
+L'entité Promotion devenant difficile à lire à cause des nombreuses règles, j’ai opté pour une refonte utilisant le pattern [Composite](https://refactoring.guru/fr/design-patterns/composite). Cela permet de représenter les règles simples et combinées de manière récursive, rendant le code plus clair et extensible.
