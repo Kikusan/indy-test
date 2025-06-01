@@ -1,11 +1,12 @@
+import { InvalidRestrictionTypeError } from './errors';
 import {
   AgeProps,
   PromotionProps,
   RestrictionNodeProps,
   RestrictionTreeProps,
   WeatherProps,
-} from './promotion.props';
-import { RestrictionNode } from './restriction.type';
+} from './types/promotion.props';
+import { RestrictionNode } from './types/restriction.type';
 import { Advantage } from './value-objects/advantage';
 import { Age } from './value-objects/age';
 import { Period } from './value-objects/period';
@@ -55,6 +56,6 @@ export class Promotion {
       }
     }
 
-    throw new Error('Unknown restriction type');
+    throw new InvalidRestrictionTypeError();
   }
 }

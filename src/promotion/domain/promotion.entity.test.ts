@@ -3,9 +3,10 @@ import {
   InvalidPeriodError,
   InvalidAgeError,
   InvalidWeatherError,
+  InvalidRestrictionTypeError,
 } from './errors';
 import { Promotion } from './promotion.entity';
-import { PromotionProps } from './promotion.props';
+import { PromotionProps } from './types/promotion.props';
 
 describe('Promotion entity', () => {
   it('should create a promotion', () => {
@@ -311,6 +312,39 @@ describe('Promotion entity', () => {
         new InvalidWeatherError(
           'Invalid weather restriction: gt must be lower than lt',
         ),
+      );
+      return;
+    }
+    expect(false).toBeTruthy();
+  });
+
+  it('should throw an invalid restriction type error if an invalid attribute is found in restrictions', () => {
+    const promotionProps: PromotionProps = {
+      name: 'basic',
+      reductionPercent: 90,
+      period: {
+        beginDate: new Date('2006-01-01'),
+        endDate: new Date('2019-01-01'),
+      },
+      restrictions: {
+        and: [
+          { failure: { eq: 18 } },
+          {
+            weather: {
+              temp: {
+                lt: 30,
+                gt: 10,
+              },
+            },
+          },
+        ],
+      },
+    } as PromotionProps;
+    try {
+      new Promotion(promotionProps);
+    } catch (e) {
+      expect(e).toEqual(
+        new InvalidRestrictionTypeError('Unknown restriction type'),
       );
       return;
     }

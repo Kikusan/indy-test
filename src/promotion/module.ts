@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PromotionController } from './primary-adapter/controller';
 import { CreatePromotionService } from './services/create-promotion';
-import { InMemoryPromotionRepository } from './repositories/InMemoryPromotionRepository';
+import { InMemoryPromotionRepository } from './repositories/promotion/InMemoryPromotionRepository';
+import { ValidatePromotionService } from './services/validate-promotion';
+import { ApiWeatherRepository } from './repositories/weather/ApiWeatherRepository';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [],
@@ -15,10 +18,31 @@ import { InMemoryPromotionRepository } from './repositories/InMemoryPromotionRep
       inject: ['promotionRepository'],
     },
     {
+      provide: ValidatePromotionService,
+      useFactory: (promotionRepository, weatherRepository) => {
+        return new ValidatePromotionService(
+          promotionRepository,
+          weatherRepository,
+        );
+      },
+      inject: ['promotionRepository', 'weatherRepository'],
+    },
+    {
       provide: 'promotionRepository',
       useFactory: () => {
         return new InMemoryPromotionRepository();
       },
+    },
+    {
+      provide: 'weatherRepository',
+      useFactory: (configService: ConfigService) => {
+        const apiKey = configService.get<string>('OPENWEATHER_API_KEY');
+        if (!apiKey) {
+          throw new Error('OPENWEATHER_API_KEY is not defined in .env');
+        }
+        return new ApiWeatherRepository(apiKey);
+      },
+      inject: [ConfigService],
     },
   ],
 })

@@ -1,4 +1,4 @@
-import { Promotion } from '../domain/promotion.entity';
+import { Promotion } from '../../domain/promotion.entity';
 
 export interface IPromotionRepository {
   save(newPromotion: Promotion): Promise<void>;

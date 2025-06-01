@@ -1,5 +1,5 @@
-import { Promotion } from '../domain/promotion.entity';
-import { IPromotionRepository } from './IPromotionRepository';
+import { Promotion } from '../../domain/promotion.entity';
+import { IPromotionRepository } from '../promotion/IPromotionRepository';
 
 export class InMemoryPromotionRepository implements IPromotionRepository {
   private readonly promotions: Promotion[] = [];

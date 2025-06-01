@@ -3,13 +3,29 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { PromotionController } from './controller';
 import { CreatePromotionService } from '../services/create-promotion';
-import { InMemoryPromotionRepository } from '../repositories/InMemoryPromotionRepository';
+import { InMemoryPromotionRepository } from '../repositories/promotion/InMemoryPromotionRepository';
 import { ErrorInterceptor } from '../../interceptors/error.interceptor';
+import { ValidatePromotionService } from '../services/validate-promotion';
+import { InMemoryWeatherRepository } from '../repositories/weather/InMemoryWeatherRepository';
+import { PromotionProps } from '../domain/types/promotion.props';
+import { Promotion } from '../domain/promotion.entity';
 
 describe('PromotionController (e2e)', () => {
   let app: INestApplication;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
+    const promotionProps: PromotionProps = {
+      name: 'promo in the list',
+      reductionPercent: 30,
+      period: {
+        beginDate: new Date('2019-01-01'),
+        endDate: new Date('2026-01-01'),
+      },
+      restrictions: {
+        age: { lt: 65, gt: 18 },
+      },
+    };
+    const promotion = new Promotion(promotionProps);
     const moduleFixture: TestingModule = await Test.createTestingModule({
       controllers: [PromotionController],
       providers: [
@@ -21,9 +37,25 @@ describe('PromotionController (e2e)', () => {
           inject: ['promotionRepository'],
         },
         {
+          provide: ValidatePromotionService,
+          useFactory: (promotionRepository, weatherRepository) => {
+            return new ValidatePromotionService(
+              promotionRepository,
+              weatherRepository,
+            );
+          },
+          inject: ['promotionRepository', 'weatherRepository'],
+        },
+        {
           provide: 'promotionRepository',
           useFactory: () => {
-            return new InMemoryPromotionRepository();
+            return new InMemoryPromotionRepository([promotion]);
+          },
+        },
+        {
+          provide: 'weatherRepository',
+          useFactory: () => {
+            return new InMemoryWeatherRepository();
           },
         },
       ],
@@ -45,8 +77,8 @@ describe('PromotionController (e2e)', () => {
   afterAll(async () => {
     await app.close();
   });
-  describe('POST', () => {
-    it('/ (POST) should create a promotion', async () => {
+  describe('/ POST', () => {
+    it('should create a promotion', async () => {
       const payload = {
         name: 'Summer Sale',
         advantage: {
@@ -96,7 +128,7 @@ describe('PromotionController (e2e)', () => {
       expect(response.body).toEqual({ message: 'Promotion saved' });
     });
 
-    it('/ (POST) should fail with an error 400 when an invalid input is given', async () => {
+    it('should fail with an error 400 when an invalid input is given', async () => {
       const invalidPayload = {
         advantage: { percent: 15 },
       };
@@ -109,7 +141,7 @@ describe('PromotionController (e2e)', () => {
       expect(response.body.message).toContain('name must be a string');
     });
 
-    it('/ (POST) should fail with an error 400 when the input does not respect domain rules', async () => {
+    it('should fail with an error 400 when the input does not respect domain rules', async () => {
       const invalidPayload = {
         name: 'Summerfz Sale',
         advantage: {
@@ -137,7 +169,7 @@ describe('PromotionController (e2e)', () => {
         .expect(400);
     });
 
-    it('/ (POST) should fail with an error 400 when the first restriction is not the date restriction', async () => {
+    it('should fail with an error 400 when the first restriction is not the date restriction', async () => {
       const invalidPayload = {
         name: 'Summerfz Sale',
         advantage: {
@@ -163,7 +195,7 @@ describe('PromotionController (e2e)', () => {
       );
     });
 
-    it('/ (POST) should fail with an error 400 when the second restriction is defined but empty', async () => {
+    it('should fail with an error 400 when the second restriction is defined but empty', async () => {
       const invalidPayload = {
         name: 'Summerfz Sale',
         advantage: {
@@ -188,6 +220,66 @@ describe('PromotionController (e2e)', () => {
       expect(response.body.message).toContain(
         'the restriction rules if defined must be have at least one restriction',
       );
+    });
+  });
+
+  describe('/validate POST', () => {
+    it('should returns status code 200', async () => {
+      const payload = {
+        name: 'promo in the list',
+        arguments: {
+          age: 25,
+          town: 'Paris',
+        },
+      };
+      await request(app.getHttpServer())
+        .post('/promotions/validate')
+        .send(payload)
+        .expect(200);
+    });
+
+    it('should returns status code 404 if promo code is unknown', async () => {
+      const invalidPayload = {
+        name: 'unknown code',
+        arguments: {
+          age: 25,
+          town: 'Paris',
+        },
+      };
+      await request(app.getHttpServer())
+        .post('/promotions/validate')
+        .send(invalidPayload)
+        .expect(404);
+    });
+
+    it('should returns status code 404 if town is unknown', async () => {
+      const invalidPayload = {
+        name: 'promo in the list',
+        arguments: {
+          age: 25,
+          town: 'no where city',
+        },
+      };
+      await request(app.getHttpServer())
+        .post('/promotions/validate')
+        .send(invalidPayload)
+        .expect(404);
+    });
+
+    it('should fail with an error 400 when an invalid input is given', async () => {
+      const invalidPayload = {
+        arguments: {
+          age: 25,
+          town: 'Paris',
+        },
+      };
+
+      const response = await request(app.getHttpServer())
+        .post('/promotions/validate')
+        .send(invalidPayload)
+        .expect(400);
+
+      expect(response.body.message).toContain('name must be a string');
     });
   });
 });

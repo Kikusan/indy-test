@@ -1,6 +1,6 @@
-import { Age } from './value-objects/age';
-import { Period } from './value-objects/period';
-import { Weather } from './value-objects/weather';
+import { Age } from '../value-objects/age';
+import { Period } from '../value-objects/period';
+import { Weather } from '../value-objects/weather';
 
 export type DateRestriction = {
   date?: Period;

@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.9",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.9",
     "@nestjs/platform-express": "^11.0.9",
     "@nestjs/swagger": "^11.2.0",
@@ -53,6 +54,7 @@
     "typescript": "^5.7.3"
   },
   "jest": {
+    "verbose": true,
     "moduleFileExtensions": [
       "js",
       "json",

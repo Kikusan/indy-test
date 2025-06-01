@@ -1,26 +1,38 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
-import { CreatePromotionDto } from './dto/create-promotion.dto';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
+import { CreatePromotionDto } from './dto/create-promotion';
 import {
   ApiTags,
   ApiCreatedResponse,
   ApiBadRequestResponse,
   ApiOperation,
+  ApiOkResponse,
 } from '@nestjs/swagger';
 import {
   PeriodProps,
   PromotionProps,
   RestrictionNodeProps,
-} from '../domain/promotion.props';
+} from '../domain/types/promotion.props';
 import { CreatePromotionService } from '../services/create-promotion';
+import { ValidatePromotionDto } from './dto/validate-promotion/validate-promotion.dto';
+import { ValidatePromotionService } from '../services/validate-promotion';
 
 @ApiTags('Promotions')
 @Controller('promotions')
 export class PromotionController {
   constructor(
     private readonly createPromotionService: CreatePromotionService,
+    private readonly validatePromotionService: ValidatePromotionService,
   ) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Create a new promotion',
     description:
@@ -28,11 +40,25 @@ export class PromotionController {
   })
   @ApiCreatedResponse({ description: 'Promotion successfully created' })
   @ApiBadRequestResponse({ description: 'Invalid input' })
-  async create(@Body() dto: CreatePromotionDto) {
+  async create(@Body() createPromotionDto: CreatePromotionDto) {
     const promotionProps: PromotionProps =
-      CreatePromotionDtoToPromotionPropsMapper(dto);
+      CreatePromotionDtoToPromotionPropsMapper(createPromotionDto);
     await this.createPromotionService.execute(promotionProps);
     return { message: 'Promotion saved' };
+  }
+
+  @Post('/validate')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Validate a promotion',
+    description:
+      'Validate a promotion with its name and user location and name',
+  })
+  @ApiOkResponse({ description: 'Promotion successfully created' })
+  @ApiBadRequestResponse({ description: 'Invalid input' })
+  async validate(@Body() validatePromotionDto: ValidatePromotionDto) {
+    await this.validatePromotionService.execute(validatePromotionDto);
+    return { message: 'Promotion validated', validatePromotionDto };
   }
 }
 

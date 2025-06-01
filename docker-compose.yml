@@ -7,5 +7,6 @@ services:
       - "4000:4000"
     environment:
       - PORT=4000
+      - WHEATHER_API_URL=https://api.openweathermap.org/data/2.5/weather
     volumes:
       - ./src:/app/src
