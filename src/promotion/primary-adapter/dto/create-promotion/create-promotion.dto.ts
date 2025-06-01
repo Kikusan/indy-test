@@ -26,7 +26,7 @@ export class CreatePromotionDto {
       {
         date: {
           after: '2019-01-01',
-          before: '2020-06-30',
+          before: '2030-06-30',
         },
       },
       {

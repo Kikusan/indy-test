@@ -12,6 +12,17 @@ export class Age {
     this.gt = ageProps.gt;
   }
 
+  validate(age: number): boolean {
+    if (this.eq !== undefined) {
+      return age === this.eq;
+    }
+
+    const gtCheck = this.gt !== undefined ? age > this.gt : true;
+    const ltCheck = this.lt !== undefined ? age < this.lt : true;
+
+    return gtCheck && ltCheck;
+  }
+
   private validateProps({ gt, lt, eq }: AgeProps) {
     const hasRange = gt !== undefined && lt !== undefined;
     const hasLtOrGt = lt !== undefined || gt !== undefined;

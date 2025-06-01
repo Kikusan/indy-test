@@ -57,8 +57,9 @@ export class PromotionController {
   @ApiOkResponse({ description: 'Promotion successfully created' })
   @ApiBadRequestResponse({ description: 'Invalid input' })
   async validate(@Body() validatePromotionDto: ValidatePromotionDto) {
-    await this.validatePromotionService.execute(validatePromotionDto);
-    return { message: 'Promotion validated', validatePromotionDto };
+    const validation =
+      await this.validatePromotionService.execute(validatePromotionDto);
+    return validation;
   }
 }
 

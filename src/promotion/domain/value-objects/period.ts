@@ -1,8 +1,8 @@
 import { InvalidPeriodError } from '../errors';
 
 export class Period {
-  private readonly before: Date;
-  private readonly after: Date;
+  readonly before: Date;
+  readonly after: Date;
   constructor(beginDate: Date, endDate: Date) {
     if (!this.isDate(beginDate) || !this.isDate(endDate)) {
       throw new InvalidPeriodError(
@@ -16,6 +16,10 @@ export class Period {
     }
     this.after = beginDate;
     this.before = endDate;
+  }
+
+  contains(date: Date): boolean {
+    return date >= this.after && date <= this.before;
   }
 
   private isDate(value: Date) {

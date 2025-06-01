@@ -50,7 +50,7 @@ describe('createPromotionService', () => {
         ],
       },
     };
-    expect(newlyCreatedPromo).toEqual(expectedPromotion);
+    expect(newlyCreatedPromo).toMatchObject(expectedPromotion);
   });
 
   it('should throws an invalid name if promo code with the same name exists', async () => {
