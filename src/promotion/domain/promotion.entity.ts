@@ -1,16 +1,14 @@
 import { InvalidRestrictionTypeError } from './errors';
-import {
-  AgeProps,
-  PromotionProps,
-  RestrictionNodeProps,
-  RestrictionTreeProps,
-  WeatherProps,
-} from './types/promotion.props';
-import { RestrictionNode } from './types/restriction.type';
+import { PromotionProps, RestrictionNodeProps } from './types/promotion.props';
 import { ValidationContextProps } from './types/validation-context.props';
 import { Advantage } from './value-objects/advantage';
 import { Age } from './value-objects/age';
 import { Period } from './value-objects/period';
+import { AgeRestriction } from './value-objects/restriction/age-restriction';
+import { AndRestriction } from './value-objects/restriction/and-restriction';
+import { IRestriction } from './value-objects/restriction/IRestriction';
+import { OrRestriction } from './value-objects/restriction/or-restriction';
+import { WeatherRestriction } from './value-objects/restriction/weather-restriction';
 import { ValidationResult } from './value-objects/validation-result';
 import { Weather } from './value-objects/weather';
 
@@ -18,7 +16,7 @@ export class Promotion {
   private readonly name: string;
   private readonly advantage: Advantage;
   private readonly dateRestriction: Period;
-  private readonly restrictionTree?: RestrictionNode;
+  private readonly restrictionTree?: IRestriction;
 
   constructor(props: PromotionProps) {
     const { name, reductionPercent, period, restrictions } = props;
@@ -34,20 +32,16 @@ export class Promotion {
     return this.name;
   };
 
-  validate = (
-    validationContextProps: ValidationContextProps,
-  ): ValidationResult => {
-    const deniedReasons = [];
-    const { date } = validationContextProps;
-    if (!this.dateRestriction.contains(date)) {
+  validate = (context: ValidationContextProps): ValidationResult => {
+    const deniedReasons: string[] = [];
+
+    if (!this.dateRestriction.contains(context.date)) {
       deniedReasons.push('DATE_NOT_ELIGIBLE');
     }
 
-    const deniedReasonsFromRestriction = this.validateRestriction(
-      this.restrictionTree,
-      validationContextProps,
-    );
-    deniedReasons.push(...deniedReasonsFromRestriction);
+    if (this.restrictionTree) {
+      deniedReasons.push(...this.restrictionTree.validate(context));
+    }
 
     if (deniedReasons.length > 0) {
       return ValidationResult.denied(this.name, deniedReasons);
@@ -55,105 +49,22 @@ export class Promotion {
     return ValidationResult.accepted(this.name, this.advantage.percent);
   };
 
-  private validateRestriction(
-    node: RestrictionNode,
-    context: ValidationContextProps,
-  ): string[] {
-    if (!node) return [];
-
-    if ('and' in node) {
-      return this.validateAndNode(node.and, context);
+  private parseRestrictions(input: RestrictionNodeProps): IRestriction {
+    if ('and' in input) {
+      return new AndRestriction(
+        input.and.map((r) => this.parseRestrictions(r)),
+      );
     }
-
-    if ('or' in node) {
-      return this.validateOrNode(node.or, context);
+    if ('or' in input) {
+      return new OrRestriction(input.or.map((r) => this.parseRestrictions(r)));
     }
-
-    return this.validateLeafNode(node, context);
-  }
-
-  private validateAndNode(
-    nodes: RestrictionNode[],
-    context: ValidationContextProps,
-  ): string[] {
-    const deniedReasons = new Set<string>();
-
-    for (const child of nodes) {
-      const childReasons = this.validateRestriction(child, context);
-      childReasons.forEach((reason) => deniedReasons.add(reason));
+    if ('age' in input) {
+      return new AgeRestriction(new Age(input.age));
     }
-
-    return [...deniedReasons];
-  }
-
-  private validateOrNode(
-    nodes: RestrictionNode[],
-    context: ValidationContextProps,
-  ): string[] {
-    const orReasons: string[][] = [];
-
-    for (const child of nodes) {
-      const reasons = this.validateRestriction(child, context);
-      if (reasons.length === 0) {
-        // Au moins un valide, on accepte
-        return [];
-      }
-      orReasons.push(reasons);
-    }
-
-    // Aucun valide, on cumule les raisons
-    const deniedReasons = new Set<string>();
-    orReasons.forEach((reasons) => {
-      reasons.forEach((reason) => deniedReasons.add(reason));
-    });
-
-    return [...deniedReasons];
-  }
-
-  private validateLeafNode(
-    node: RestrictionNode,
-    context: ValidationContextProps,
-  ): string[] {
-    const deniedReasons = new Set<string>();
-
-    if ('age' in node && node.age && !node.age.validate(context.age)) {
-      deniedReasons.add('AGE_NOT_ELIGIBLE');
-    }
-
-    if (
-      'weather' in node &&
-      node.weather &&
-      !node.weather.validate(context.weather)
-    ) {
-      deniedReasons.add('WEATHER_NOT_ELIGIBLE');
-    }
-
-    return [...deniedReasons];
-  }
-
-  private parseRestrictions(input: RestrictionNodeProps): RestrictionNode {
-    const parsers: Record<
-      string,
-      (val: RestrictionTreeProps) => RestrictionNode
-    > = {
-      and: (val: RestrictionNodeProps[]) => ({
-        and: val.map((r) => this.parseRestrictions(r)),
-      }),
-      or: (val: RestrictionNodeProps[]) => ({
-        or: val.map((r) => this.parseRestrictions(r)),
-      }),
-      age: (val: AgeProps) => ({
-        age: new Age(val),
-      }),
-      weather: (val: WeatherProps) => ({
-        weather: new Weather(val.is, val.temp),
-      }),
-    };
-
-    for (const [key, parser] of Object.entries(parsers)) {
-      if (key in input) {
-        return parser(input[key]);
-      }
+    if ('weather' in input) {
+      return new WeatherRestriction(
+        new Weather(input.weather.is, input.weather.temp),
+      );
     }
 
     throw new InvalidRestrictionTypeError();

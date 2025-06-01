@@ -93,38 +93,51 @@ describe('Promotion entity', () => {
 
       const expectedPromotion = {
         name: 'DeepPromo',
-        advantage: { percent: 25 },
+        advantage: {
+          percent: 25,
+        },
         dateRestriction: {
-          after: new Date('2021-01-01'),
-          before: new Date('2024-12-31'),
+          after: new Date('2021-01-01T00:00:00.000Z'),
+          before: new Date('2024-12-31T00:00:00.000Z'),
         },
         restrictionTree: {
-          or: [
+          restrictions: [
             {
-              age: { eq: 50 },
+              age: {
+                eq: 50,
+              },
             },
             {
-              and: [
+              restrictions: [
                 {
-                  age: { gt: 18, lt: 35 },
+                  age: {
+                    lt: 35,
+                    gt: 18,
+                  },
                 },
                 {
-                  or: [
+                  restrictions: [
                     {
                       weather: {
                         is: 'Rain',
-                        temp: { lt: 10 },
+                        temp: {
+                          lt: 10,
+                        },
                       },
                     },
                     {
-                      and: [
+                      restrictions: [
                         {
-                          age: { gt: 60 },
+                          age: {
+                            gt: 60,
+                          },
                         },
                         {
                           weather: {
                             is: 'Clear',
-                            temp: { gt: 20 },
+                            temp: {
+                              gt: 20,
+                            },
                           },
                         },
                       ],
@@ -136,7 +149,6 @@ describe('Promotion entity', () => {
           ],
         },
       };
-
       expect(promotion).toMatchObject(expectedPromotion);
     });
 
@@ -356,6 +368,36 @@ describe('Promotion entity', () => {
   });
 
   describe('validate', () => {
+    it('should be accepted for a simple one', () => {
+      const promotionProps: PromotionProps = {
+        name: 'basic',
+        reductionPercent: 50,
+        period: {
+          beginDate: new Date('2019-01-01'),
+          endDate: new Date('2026-01-01'),
+        },
+      };
+
+      const promotion = new Promotion(promotionProps);
+      const validationContext: ValidationContextProps = {
+        age: 30,
+        date: new Date('2022-01-01'),
+        weather: {
+          condition: 'Clear',
+          maxTemp: 30,
+          minTemp: 20,
+        },
+      };
+
+      const validationResult = promotion.validate(validationContext);
+      const expectedValidationResult: ValidationResult = {
+        name: 'basic',
+        status: 'accepted',
+        advantage: { percent: 50 },
+      };
+
+      expect(validationResult).toEqual(expectedValidationResult);
+    });
     it('should be denied when the date is not included in the validity period', () => {
       const promotionProps: PromotionProps = {
         name: 'basic',

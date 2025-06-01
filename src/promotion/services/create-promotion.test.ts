@@ -33,18 +33,36 @@ describe('createPromotionService', () => {
     const newlyCreatedPromo = await promotionRepository.getbyName('promo test');
     const expectedPromotion = {
       name: 'promo test',
-      advantage: { percent: 20 },
+      advantage: {
+        percent: 20,
+      },
       dateRestriction: {
         after: new Date('2019-01-01T00:00:00.000Z'),
         before: new Date('2020-06-30T00:00:00.000Z'),
       },
       restrictionTree: {
-        or: [
-          { age: { eq: 40 } },
+        restrictions: [
           {
-            and: [
-              { age: { lt: 30, gt: 15 } },
-              { weather: { is: 'Clear', temp: { gt: 15 } } },
+            age: {
+              eq: 40,
+            },
+          },
+          {
+            restrictions: [
+              {
+                age: {
+                  lt: 30,
+                  gt: 15,
+                },
+              },
+              {
+                weather: {
+                  is: 'Clear',
+                  temp: {
+                    gt: 15,
+                  },
+                },
+              },
             ],
           },
         ],
