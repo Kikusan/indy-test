@@ -39,7 +39,7 @@ Pour les règles, on s'aperçoit qu'il y a 2 types:
 
 Ce qui signifie que pour les combinaisons, je suis obligé de tester récursivement les règles jusqu'à tomber sur une des règles de fin.
 
-⚠️ Si j'avais gardé la logique de base, la règle de date aurait été une règle de fin mais par contre dans mon entité, je n'aurais plus dateRestriction et restrictionTree mais restrictions qui serait un tableau de restrictionTree. Bien entendu la restriction de date aurait été parmi les leaf restrinctions.
+⚠️ Si j'avais gardé la logique de base, la règle de date aurait été une règle de fin mais par contre dans mon entité, je n'aurais plus dateRestriction et restrictionTree mais restrictions qui serait un tableau de restrictionTree. Bien entendu la restriction de date aurait été parmi les leaf restrictions.
 
 ## Deuxième étape
 

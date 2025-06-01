@@ -42,7 +42,16 @@ cd indy-test
 npm i
 ```
 
-### 3. Lancer le projet avec docker
+### 3. Configuration de l'application
+
+Prendre le fichier .env.example et en faire une copie nommer .env puis mettre la clé de l'api d'open weather.
+(soit vous avez déjà une clé sinon vous pouvez en utiliser celle mise à disposition dans le test)
+
+```bash
+OPENWEATHER_API_KEY=xxx-xxxx-xxxxxx-xxxxxxxx
+```
+
+### 4. Lancer le projet avec docker
 
 ```bash
 docker compose up
@@ -51,7 +60,7 @@ docker compose up
 ou docker-compose up selon la version de docker compose
 le swagger sera accessible sur [http://localhost:4000/api](http://localhost:4000/api)
 
-### 4. désinstaller le projet
+### 5. désinstaller le projet
 
 ```bash
 docker compose down --volumes
