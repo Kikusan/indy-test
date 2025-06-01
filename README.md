@@ -75,4 +75,4 @@ Vous pouvez voir l'évolution de ma réfléxion [ici](diary.md)
 
 ## Stratégie de test
 
-Vous pouvez voir ma réfléxion sur les tests [ici](tests.md)
+Vous pouvez voir ma réfléxion sur les tests [ici](test.md)
