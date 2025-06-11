@@ -1,5 +1,5 @@
 import { IWeatherRepository } from './IWeatherRepository';
-import { WeatherDto } from '../../validate-promotion/domain/types/weather.dto';
+import { WeatherDto } from '../../entities/types/weather.dto';
 import NotFoundError from '@errors/RessourceNotFoundError';
 import SourceUnavailableError from '@errors/SourceUnavailableError';
 

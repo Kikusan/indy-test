@@ -1,4 +1,4 @@
-import { WeatherDto } from '../../../validate-promotion/domain/types/weather.dto';
+import { WeatherDto } from './weather.dto';
 
 export type ValidationContextProps = {
   age: number;

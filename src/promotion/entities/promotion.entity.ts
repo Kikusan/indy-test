@@ -1,16 +1,16 @@
-import { InvalidRestrictionTypeError } from '../create-promotion/domain/errors';
+import { InvalidRestrictionTypeError } from './errors';
 import { PromotionProps, RestrictionNodeProps } from './types/promotion.props';
-import { ValidationContextProps } from '../create-promotion/domain/types/validation-context.props';
-import { Advantage } from '../create-promotion/domain/value-objects/advantage';
-import { Age } from '../create-promotion/domain/value-objects/age';
-import { Period } from '../create-promotion/domain/value-objects/period';
-import { AgeRestriction } from '../create-promotion/domain/value-objects/restriction/age-restriction';
-import { AndRestriction } from '../create-promotion/domain/value-objects/restriction/and-restriction';
-import { IRestriction } from '../create-promotion/domain/value-objects/restriction/IRestriction';
-import { OrRestriction } from '../create-promotion/domain/value-objects/restriction/or-restriction';
-import { WeatherRestriction } from '../create-promotion/domain/value-objects/restriction/weather-restriction';
-import { ValidationResult } from '../validate-promotion/domain/value-objects/validation-result';
-import { Weather } from '../create-promotion/domain/value-objects/weather';
+import { ValidationContextProps } from './types/validation-context.props';
+import { Advantage } from './value-objects/advantage';
+import { Age } from './value-objects/age';
+import { Period } from './value-objects/period';
+import { AgeRestriction } from './value-objects/restriction/age-restriction';
+import { AndRestriction } from './value-objects/restriction/and-restriction';
+import { IRestriction } from './value-objects/restriction/IRestriction';
+import { OrRestriction } from './value-objects/restriction/or-restriction';
+import { WeatherRestriction } from './value-objects/restriction/weather-restriction';
+import { ValidationResult } from '../validate-promotion/dto/validation-result';
+import { Weather } from './value-objects/weather';
 
 export class Promotion {
   private readonly name: string;
