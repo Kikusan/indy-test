@@ -1,6 +1,6 @@
 import { IWeatherRepository } from './IWeatherRepository';
-import { WeatherDto } from '../../domain/types/weather.dto';
-import NotFoundError from '@errors/NotFoundError';
+import { WeatherDto } from '../../validate-promotion/domain/types/weather.dto';
+import NotFoundError from '@errors/RessourceNotFoundError';
 import SourceUnavailableError from '@errors/SourceUnavailableError';
 
 export class ApiWeatherRepository implements IWeatherRepository {

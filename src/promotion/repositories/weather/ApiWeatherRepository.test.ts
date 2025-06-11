@@ -1,6 +1,6 @@
 // __tests__/ApiWeatherRepository.test.ts
 import { ApiWeatherRepository } from './ApiWeatherRepository';
-import NotFoundError from '@errors/NotFoundError';
+import NotFoundError from '@errors/RessourceNotFoundError';
 import SourceUnavailableError from '@errors/SourceUnavailableError';
 
 const mockFetch = jest.fn();

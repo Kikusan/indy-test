@@ -1,5 +1,5 @@
 import { InvalidWeatherError } from '../errors';
-import { WeatherDto } from '../types/weather.dto';
+import { WeatherDto } from '../../../validate-promotion/domain/types/weather.dto';
 
 export type WeatherType =
   | 'Thunderstorm'

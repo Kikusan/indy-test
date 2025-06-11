@@ -4,11 +4,11 @@ import {
   InvalidAgeError,
   InvalidWeatherError,
   InvalidRestrictionTypeError,
-} from './errors';
+} from '../create-promotion/domain/errors';
 import { Promotion } from './promotion.entity';
 import { PromotionProps } from './types/promotion.props';
-import { ValidationContextProps } from './types/validation-context.props';
-import { ValidationResult } from './value-objects/validation-result';
+import { ValidationContextProps } from '../create-promotion/domain/types/validation-context.props';
+import { ValidationResult } from '../validate-promotion/domain/value-objects/validation-result';
 
 describe('Promotion entity', () => {
   describe('constructor', () => {

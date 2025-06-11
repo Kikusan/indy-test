@@ -1,4 +1,4 @@
-import BadRequestError from '@errors/BadRequestError';
+import BadRequestError from '@errors/BusinessRuleViolationError';
 
 export class InvalidNameError extends BadRequestError {
   constructor(name: string) {

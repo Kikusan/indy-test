@@ -18,10 +18,10 @@ import {
   PeriodProps,
   PromotionProps,
   RestrictionNodeProps,
-} from '../domain/types/promotion.props';
-import { CreatePromotionService } from '../services/create-promotion';
+} from '../entities/types/promotion.props';
+import { CreatePromotionService } from '../create-promotion/usecase';
 import { ValidatePromotionDto } from './dto/validate-promotion/validate-promotion.dto';
-import { ValidatePromotionService } from '../services/validate-promotion';
+import { ValidatePromotionService } from '../validate-promotion/usecase';
 
 @ApiTags('Promotions')
 @Controller('promotions')

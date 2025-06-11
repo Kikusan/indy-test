@@ -1,5 +1,5 @@
-import NotFoundError from '@errors/NotFoundError';
-import { WeatherDto } from '../../domain/types/weather.dto';
+import NotFoundError from '@errors/RessourceNotFoundError';
+import { WeatherDto } from '../../validate-promotion/domain/types/weather.dto';
 import { IWeatherRepository } from './IWeatherRepository';
 
 export class InMemoryWeatherRepository implements IWeatherRepository {

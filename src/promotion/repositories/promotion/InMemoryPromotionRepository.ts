@@ -1,4 +1,4 @@
-import { Promotion } from '../../domain/promotion.entity';
+import { Promotion } from '../../entities/promotion.entity';
 import { IPromotionRepository } from '../promotion/IPromotionRepository';
 
 export class InMemoryPromotionRepository implements IPromotionRepository {

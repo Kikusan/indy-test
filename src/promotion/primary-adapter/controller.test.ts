@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { PromotionController } from './controller';
-import { CreatePromotionService } from '../services/create-promotion';
+import { CreatePromotionService } from '../create-promotion/usecase';
 import { InMemoryPromotionRepository } from '../repositories/promotion/InMemoryPromotionRepository';
 import { ErrorInterceptor } from '../../interceptors/error.interceptor';
-import { ValidatePromotionService } from '../services/validate-promotion';
+import { ValidatePromotionService } from '../validate-promotion/usecase';
 import { InMemoryWeatherRepository } from '../repositories/weather/InMemoryWeatherRepository';
-import { PromotionProps } from '../domain/types/promotion.props';
-import { Promotion } from '../domain/promotion.entity';
+import { PromotionProps } from '../entities/types/promotion.props';
+import { Promotion } from '../entities/promotion.entity';
 
 describe('PromotionController (e2e)', () => {
   let app: INestApplication;

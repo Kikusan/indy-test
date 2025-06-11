@@ -1,5 +1,5 @@
 import { InvalidAgeError } from '../errors';
-import { AgeProps } from '../types/promotion.props';
+import { AgeProps } from '../../../entities/types/promotion.props';
 
 export class Age {
   private readonly gt: number;

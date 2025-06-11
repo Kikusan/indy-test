@@ -1,9 +1,9 @@
-import NotFoundError from '@errors/NotFoundError';
-import { Promotion } from '../domain/promotion.entity';
-import { PromotionProps } from '../domain/types/promotion.props';
+import NotFoundError from '@errors/RessourceNotFoundError';
+import { Promotion } from '../entities/promotion.entity';
+import { PromotionProps } from '../entities/types/promotion.props';
 import { InMemoryPromotionRepository } from '../repositories/promotion/InMemoryPromotionRepository';
 import { InMemoryWeatherRepository } from '../repositories/weather/InMemoryWeatherRepository';
-import { ValidatePromotionService } from './validate-promotion';
+import { ValidatePromotionService } from './usecase';
 
 describe('createPromotionService', () => {
   it('should be ok', async () => {

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PromotionController } from './primary-adapter/controller';
-import { CreatePromotionService } from './services/create-promotion';
+import { CreatePromotionService } from './create-promotion/usecase';
 import { InMemoryPromotionRepository } from './repositories/promotion/InMemoryPromotionRepository';
-import { ValidatePromotionService } from './services/validate-promotion';
+import { ValidatePromotionService } from './validate-promotion/usecase';
 import { ApiWeatherRepository } from './repositories/weather/ApiWeatherRepository';
 import { ConfigService } from '@nestjs/config';
 

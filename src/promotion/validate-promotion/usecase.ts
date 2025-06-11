@@ -1,8 +1,8 @@
-import NotFoundError from '@errors/NotFoundError';
-import { ValidationProps } from '../domain/types/validation.props';
+import NotFoundError from '@errors/RessourceNotFoundError';
+import { ValidationProps } from './domain/types/validation.props';
 import { IPromotionRepository } from '../repositories/promotion/IPromotionRepository';
 import { IWeatherRepository } from '../repositories/weather/IWeatherRepository';
-import { ValidationResult } from '../domain/value-objects/validation-result';
+import { ValidationResult } from './domain/value-objects/validation-result';
 
 export class ValidatePromotionService {
   constructor(

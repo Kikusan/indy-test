@@ -25,11 +25,6 @@ export type RestrictionNodeProps =
   | { age: AgeProps }
   | { weather: WeatherProps };
 
-export type RestrictionTreeProps =
-  | AgeProps
-  | WeatherProps
-  | RestrictionNodeProps[];
-
 export type PeriodProps = {
   beginDate: Date;
   endDate: Date;

@@ -10,8 +10,8 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
-import BadRequestError from '@errors/BadRequestError';
-import NotFoundError from '@errors/NotFoundError';
+import BadRequestError from '@errors/BusinessRuleViolationError';
+import NotFoundError from '@errors/RessourceNotFoundError';
 import SourceUnavailableError from '@errors/SourceUnavailableError';
 @Injectable()
 export class ErrorInterceptor implements NestInterceptor {
