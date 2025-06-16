@@ -1,5 +1,5 @@
 import { InvalidRestrictionTypeError } from './errors';
-import { PromotionProps, RestrictionNodeProps } from './types/promotion.props';
+import { PromotionProps } from './types/promotion.props';
 import { ValidationContextProps } from './types/validation-context.props';
 import { Advantage } from './value-objects/advantage';
 import { Age } from './value-objects/age';
@@ -12,11 +12,22 @@ import { WeatherRestriction } from './value-objects/restriction/weather-restrict
 import { ValidationResult } from '../validate-promotion/dto/validation-result';
 import { Weather } from './value-objects/weather';
 
+type CreatorFn = (input: any) => IRestriction;
 export class Promotion {
   private readonly name: string;
   private readonly advantage: Advantage;
   private readonly dateRestriction: Period;
   private readonly restrictionTree?: IRestriction;
+
+  private readonly creators: Record<string, CreatorFn> = {
+    and: (input) =>
+      new AndRestriction(input.map((r) => this.parseRestrictions(r))),
+    or: (input) =>
+      new OrRestriction(input.map((r) => this.parseRestrictions(r))),
+    age: (input) => new AgeRestriction(new Age(input)),
+    weather: (input) =>
+      new WeatherRestriction(new Weather(input.is, input.temp)),
+  };
 
   constructor(props: PromotionProps) {
     const { name, reductionPercent, period, restrictions } = props;
@@ -49,24 +60,10 @@ export class Promotion {
     return ValidationResult.accepted(this.name, this.advantage.percent);
   };
 
-  private parseRestrictions(input: RestrictionNodeProps): IRestriction {
-    if ('and' in input) {
-      return new AndRestriction(
-        input.and.map((r) => this.parseRestrictions(r)),
-      );
-    }
-    if ('or' in input) {
-      return new OrRestriction(input.or.map((r) => this.parseRestrictions(r)));
-    }
-    if ('age' in input) {
-      return new AgeRestriction(new Age(input.age));
-    }
-    if ('weather' in input) {
-      return new WeatherRestriction(
-        new Weather(input.weather.is, input.weather.temp),
-      );
-    }
-
-    throw new InvalidRestrictionTypeError();
-  }
+  parseRestrictions = (input) => {
+    const key = Object.keys(input)[0];
+    const creator = this.creators[key];
+    if (!creator) throw new InvalidRestrictionTypeError();
+    return creator(input[key]);
+  };
 }
